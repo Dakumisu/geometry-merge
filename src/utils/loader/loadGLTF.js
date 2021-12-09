@@ -1,21 +1,32 @@
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { MeshoptDecoder } from 'meshoptimizer/meshopt_decoder.module';
+import { BufferAttribute, BufferGeometry } from 'three'
 
-const gltfLoader = new GLTFLoader();
-gltfLoader.setMeshoptDecoder(MeshoptDecoder);
+export default function loadGLTF(src) {
+   const worker = new Worker(new URL('../../workers/loadFatGLTFWorker.js', import.meta.url))
 
-export default async function loadGLTF(url, opts = {}) {
-    const response = await fetch(url);
-    const res = await response.arrayBuffer();
+   const geometries = []
 
-    return await new Promise(resolve => gltfLoader.parse(res, '', data => {
-        if (opts.onLoad) opts.onLoad(data);
-        resolve(data);
-    }));
+   return new Promise( resolve => {
+      worker.postMessage(
+         { url: src },
+      )
+
+      worker.addEventListener('message', e => {
+         const geo = e.data
+
+         geo.forEach( attributes => {
+            const bufferGeo = new BufferGeometry()
+      
+            // Conversion des attributes du model en geometry
+            bufferGeo.setIndex(new BufferAttribute( attributes.index, 1, false ) )
+            bufferGeo.setAttribute( 'position', new BufferAttribute( attributes.pos, 3, false ) )
+            bufferGeo.setAttribute( 'normal', new BufferAttribute( attributes.normal, 3, false ) )
+            bufferGeo.setAttribute( 'uv', new BufferAttribute( attributes.uv, 2, false ) )
+            
+            geometries.push(bufferGeo)
+         })
+         
+         worker.terminate()
+         resolve(geometries)
+      })
+   })
 }
-
-loadGLTF.loader = {
-    name: 'gltf',
-    extensions: [ '.gltf', '.glb' ],
-    function: loadGLTF
-};

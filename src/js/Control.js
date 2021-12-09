@@ -1,6 +1,6 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls' // https://threejs.org/docs/#examples/en/controls/OrbitControls
 
-import World from '@src/js/World'
+import World from '@js/World'
 
 class Control {
    constructor(opt) {

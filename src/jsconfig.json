@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "exclude": [
     "dist",
-    "node_modules"
+    // "node_modules"
   ],
   "include": [
     "../src/**/*",
@@ -18,10 +18,10 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@src/*": ["./*"],
       "@js/*": ["./js/*"],
       "@glsl/*": ["./glsl/*"],
       "@utils/*": ["./utils/*"],
+      "@src/*": ["./*"],
       
       "@public/*": ["../public/*"],
       "@static/*": ["../static/*"],

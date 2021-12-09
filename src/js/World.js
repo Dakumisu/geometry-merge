@@ -1,4 +1,4 @@
-import { Scene, PerspectiveCamera, WebGLRenderer } from 'three'
+import { Scene, PerspectiveCamera, WebGLRenderer, Vector3 } from 'three'
 
 import { Store } from '@js/Store'
 
@@ -26,7 +26,8 @@ class World {
 
    setCamera() {
       this.camera = new PerspectiveCamera(75, Store.sizes.width / Store.sizes.height, 0.01, 1000)
-      this.camera.position.set(0, 0, 3);  
+      this.camera.position.set(-3, 1, 3);  
+      this.camera.lookAt(new Vector3())
 
       this.add(this.camera)
    }
@@ -65,8 +66,13 @@ class World {
 
    render() {
       if (!this.initialized) return
-
+      
       this.renderer.render(this.scene, this.camera)
+   }
+   
+   update(et) {
+      if (!this.initialized) return
+
    }
 }
 
