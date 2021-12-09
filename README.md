@@ -1,4 +1,4 @@
-# WebGL Template
+# Merge Tool 🛠
 
 Hi :)
 
